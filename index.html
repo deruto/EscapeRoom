@@ -1,62 +1,95 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    <script>
-  let hasKey = false;
+<head>
+  <meta charset="utf-8">
+  <title>Escape Room VR</title>
 
-  AFRAME.registerComponent('collect-key', {
-    init: function () {
-      this.el.addEventListener('click', () => {
-        this.el.setAttribute('visible', false);
-        hasKey = true;
-        alert("You picked up the key!");
-      });
-    }
-  });
+  <!-- A-Frame Library -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
 
-  AFRAME.registerComponent('open-door', {
-    init: function () {
-      this.el.addEventListener('click', () => {
-        if (hasKey) {
-          this.el.setAttribute('color', 'green');
-          this.el.setAttribute('position', '0 1 -6'); // move door away
-          alert("You escaped!");
-        } else {
-          alert("Door is locked!");
-        }
-      });
-    }
-  });
-</script>
-  </head>
-  <body>
-    <a-scene>
+  <!-- Game Logic -->
+  <script>
+    let hasKey = false;
 
-      <!-- Camera -->
-      <a-entity camera look-controls position="0 1.6 0">
-        <a-cursor></a-cursor>
-      </a-entity>
+    // KEY PICKUP COMPONENT
+    AFRAME.registerComponent('collect-key', {
+      init: function () {
+        this.el.addEventListener('click', () => {
+          this.el.setAttribute('visible', false);
+          hasKey = true;
+          console.log("Key collected");
+          alert("You picked up the key!");
+        });
+      }
+    });
 
-      <!-- Floor -->
-      <a-plane rotation="-90 0 0" width="10" height="10" color="#7BC8A4"></a-plane>
+    // DOOR COMPONENT
+    AFRAME.registerComponent('open-door', {
+      init: function () {
+        this.el.addEventListener('click', () => {
+          if (hasKey) {
+            this.el.setAttribute('color', 'green');
+            this.el.setAttribute('position', '0 1 -6'); // move door away
+            console.log("Door opened");
+            alert("You escaped!");
+          } else {
+            console.log("Door locked");
+            alert("Door is locked. Find the key!");
+          }
+        });
+      }
+    });
+  </script>
+</head>
 
-      <!-- Walls -->
-      <a-box position="0 2 -5" width="10" height="4" depth="0.5" color="#ccc"></a-box>
-      <a-box position="5 2 0" width="0.5" height="4" depth="10" color="#ccc"></a-box>
-      <a-box position="-5 2 0" width="0.5" height="4" depth="10" color="#ccc"></a-box>
+<body>
+  <a-scene>
 
-      <!-- Door -->
-      <a-box id="door" position="0 1 -4.9" width="2" height="3" depth="0.2" color="brown"></a-box>
+    <!-- Camera + Cursor -->
+    <a-entity camera look-controls position="0 1.6 0">
+      <a-cursor></a-cursor>
+    </a-entity>
 
-      <!-- Key -->
-      <a-sphere id="key" position="2 1 -2" radius="0.2" color="gold"></a-sphere>
-      <a-box id="door" open-door ...></a-box>
-      <a-sphere id="key" collect-key ...></a-sphere>
+    <!-- Floor -->
+    <a-plane 
+      rotation="-90 0 0" 
+      width="10" 
+      height="10" 
+      color="#7BC8A4">
+    </a-plane>
 
-      <!-- Clue Text -->
-      <a-text value="Find the key to escape!" position="-2 2 -3" color="black"></a-text>
+    <!-- Walls -->
+    <a-box position="0 2 -5" width="10" height="4" depth="0.5" color="#ccc"></a-box>
+    <a-box position="5 2 0" width="0.5" height="4" depth="10" color="#ccc"></a-box>
+    <a-box position="-5 2 0" width="0.5" height="4" depth="10" color="#ccc"></a-box>
 
-    </a-scene>
-  </body>
+    <!-- Door (Clickable) -->
+    <a-box 
+      id="door"
+      open-door
+      position="0 1 -4.9"
+      width="2"
+      height="3"
+      depth="0.2"
+      color="brown">
+    </a-box>
+
+    <!-- Key (Clickable) -->
+    <a-sphere 
+      id="key"
+      collect-key
+      position="2 1 -2"
+      radius="0.2"
+      color="gold">
+    </a-sphere>
+
+    <!-- Instruction Text -->
+    <a-text 
+      value="Find the key to escape!"
+      position="-2 2 -3"
+      color="black">
+    </a-text>
+
+  </a-scene>
+</body>
 </html>
