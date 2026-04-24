@@ -2,6 +2,33 @@
 <html>
   <head>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script>
+  let hasKey = false;
+
+  AFRAME.registerComponent('collect-key', {
+    init: function () {
+      this.el.addEventListener('click', () => {
+        this.el.setAttribute('visible', false);
+        hasKey = true;
+        alert("You picked up the key!");
+      });
+    }
+  });
+
+  AFRAME.registerComponent('open-door', {
+    init: function () {
+      this.el.addEventListener('click', () => {
+        if (hasKey) {
+          this.el.setAttribute('color', 'green');
+          this.el.setAttribute('position', '0 1 -6'); // move door away
+          alert("You escaped!");
+        } else {
+          alert("Door is locked!");
+        }
+      });
+    }
+  });
+</script>
   </head>
   <body>
     <a-scene>
@@ -24,6 +51,8 @@
 
       <!-- Key -->
       <a-sphere id="key" position="2 1 -2" radius="0.2" color="gold"></a-sphere>
+      <a-box id="door" open-door ...></a-box>
+      <a-sphere id="key" collect-key ...></a-sphere>
 
       <!-- Clue Text -->
       <a-text value="Find the key to escape!" position="-2 2 -3" color="black"></a-text>
