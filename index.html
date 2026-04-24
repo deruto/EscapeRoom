@@ -4,37 +4,34 @@
   <meta charset="utf-8">
   <title>Escape Room VR</title>
 
-  <!-- A-Frame Library -->
+  <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
 
   <!-- Game Logic -->
   <script>
     let hasKey = false;
 
-    // KEY PICKUP COMPONENT
+    // KEY PICKUP
     AFRAME.registerComponent('collect-key', {
       init: function () {
         this.el.addEventListener('click', () => {
           this.el.setAttribute('visible', false);
           hasKey = true;
           console.log("Key collected");
-          alert("You picked up the key!");
         });
       }
     });
 
-    // DOOR COMPONENT
+    // DOOR OPEN
     AFRAME.registerComponent('open-door', {
       init: function () {
         this.el.addEventListener('click', () => {
           if (hasKey) {
-            this.el.setAttribute('color', 'green');
-            this.el.setAttribute('position', '0 1 -6'); // move door away
+            this.el.setAttribute('position', '0 1 -7');
+            this.el.setAttribute('color', '#4CAF50'); // green
             console.log("Door opened");
-            alert("You escaped!");
           } else {
             console.log("Door locked");
-            alert("Door is locked. Find the key!");
           }
         });
       }
@@ -45,49 +42,59 @@
 <body>
   <a-scene>
 
-    <!-- Camera + Cursor -->
-    <a-entity camera look-controls position="0 1.6 0">
+    <!-- DARK SKY -->
+    <a-sky color="#1a1a2e"></a-sky>
+
+    <!-- PLAYER (WASD + ARROW KEYS + MOUSE LOOK) -->
+    <a-entity 
+      position="0 1.6 3"
+      camera 
+      look-controls="pointerLockEnabled: true"
+      wasd-controls="acceleration: 30">
       <a-cursor></a-cursor>
     </a-entity>
 
-    <!-- Floor -->
+    <!-- FLOOR -->
     <a-plane 
       rotation="-90 0 0" 
       width="10" 
       height="10" 
-      color="#7BC8A4">
+      color="#3a3a3a">
     </a-plane>
 
-    <!-- Walls -->
-    <a-box position="0 2 -5" width="10" height="4" depth="0.5" color="#ccc"></a-box>
-    <a-box position="5 2 0" width="0.5" height="4" depth="10" color="#ccc"></a-box>
-    <a-box position="-5 2 0" width="0.5" height="4" depth="10" color="#ccc"></a-box>
+    <!-- WALLS -->
+    <a-box position="0 2 -5" width="10" height="4" depth="0.5" color="#888"></a-box>
+    <a-box position="5 2 0" width="0.5" height="4" depth="10" color="#888"></a-box>
+    <a-box position="-5 2 0" width="0.5" height="4" depth="10" color="#888"></a-box>
 
-    <!-- Door (Clickable) -->
+    <!-- DOOR FRAME -->
+    <a-box position="0 1 -4.95" width="2.4" height="3.4" depth="0.3" color="#222"></a-box>
+
+    <!-- DOOR PANEL -->
     <a-box 
       id="door"
       open-door
-      position="0 1 -4.9"
+      position="0 1 -4.8"
       width="2"
       height="3"
       depth="0.2"
-      color="brown">
+      color="#5a3e2b">
     </a-box>
 
-    <!-- Key (Clickable) -->
+    <!-- KEY -->
     <a-sphere 
       id="key"
       collect-key
       position="2 1 -2"
       radius="0.2"
-      color="gold">
+      color="#FFD700">
     </a-sphere>
 
-    <!-- Instruction Text -->
+    <!-- TEXT -->
     <a-text 
-      value="Find the key to escape!"
+      value="Find the key to escape"
       position="-2 2 -3"
-      color="black">
+      color="#ffffff">
     </a-text>
 
   </a-scene>
